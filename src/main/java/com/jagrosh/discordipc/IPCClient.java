@@ -173,6 +173,37 @@ public final class IPCClient implements Closeable
     }
 
     /**
+     * Send a JSON encoded frame to Discord.
+     * The nonce will automatically be set.
+     *
+     * @param json the JSON payload to send
+     *
+     * @throws IllegalStateException
+     *         If a connection was not made prior to invoking
+     *         this method.
+     */
+    public void sendFrame(JSONObject json) {
+        checkConnected(true);
+        pipe.send(OpCode.FRAME, json, null);
+    }
+
+    /**
+     * Send a JSON encoded frame to Discord.
+     * The nonce will automatically be set.
+     *
+     * @param json the JSON payload to send
+     * @param callback the callback to invoke when the server responds
+     *
+     * @throws IllegalStateException
+     *         If a connection was not made prior to invoking
+     *         this method.
+     */
+    public void sendFrame(JSONObject json, Callback callback) {
+        checkConnected(true);
+        pipe.send(OpCode.FRAME, json, callback);
+    }
+
+    /**
      * Adds an event {@link Event} to this IPCClient.<br>
      * If the provided {@link Event} is added more than once,
      * it does nothing.
@@ -284,6 +315,22 @@ public final class IPCClient implements Closeable
         NULL(false), // used for confirmation
         READY(false),
         ERROR(false),
+        GUILD_STATUS(true),
+        GUILD_CREATE(true),
+        CHANNEL_CREATE(true),
+        VOICE_CHANNEL_SELECT(true),
+        VOICE_STATE_CREATE(true),
+        VOICE_STATE_UPDATE(true),
+        VOICE_STATE_DELETE(true),
+        VOICE_SETTINGS_UPDATE(true),
+        VOICE_CONNECTION_STATUS(true),
+        SPEAKING_START(true),
+        SPEAKING_STOP(true),
+        MESSAGE_CREATE(true),
+        MESSAGE_UPDATE(true),
+        MESSAGE_DELETE(true),
+        NOTIFICATION_CREATE(true),
+        CAPTURE_SHORTCUT_CHANGE(true),
         ACTIVITY_JOIN(true),
         ACTIVITY_SPECTATE(true),
         ACTIVITY_JOIN_REQUEST(true),
