@@ -5,7 +5,7 @@
     <artifactId>DiscordIPC</artifactId>
     <version>0.3</version>
     <packaging>jar</packaging>
-    
+
     <dependencies>
         <dependency>
             <groupId>org.json</groupId>
@@ -20,7 +20,7 @@
         <dependency>
             <groupId>com.cosium.junixsocket</groupId>
             <artifactId>junixsocket-common</artifactId>
-            <version>2.0.4</version>
+            <version>2.0.4.3</version>
         </dependency>
         <dependency>
             <groupId>com.kohlschutter.junixsocket</groupId>
@@ -28,7 +28,7 @@
             <version>2.0.4</version>
         </dependency>
     </dependencies>
-    
+
     <build>
         <plugins>
             <plugin>
@@ -57,7 +57,7 @@
             </plugin>
         </plugins>
     </build>
-    
+
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>1.8</maven.compiler.source>
