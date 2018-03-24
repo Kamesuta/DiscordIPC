@@ -114,8 +114,6 @@ public final class IPCClient implements Closeable
      * Gets encoding to send .<p>
      * default: UTF-8
      *
-     * @param encoding for this IPCClient.
-     *
      * @return encoding
      */
     public String getEncoding() {
