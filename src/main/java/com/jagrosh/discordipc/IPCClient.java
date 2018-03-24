@@ -61,7 +61,7 @@ public final class IPCClient implements Closeable
     private volatile Pipe pipe;
     private IPCListener listener = null;
     private Thread readThread = null;
-    
+
     /**
      * Constructs a new IPCClient using the provided {@code clientId}.<br>
      * This is initially unconnected to Discord.
@@ -73,7 +73,7 @@ public final class IPCClient implements Closeable
     {
         this.clientId = clientId;
     }
-    
+
     /**
      * Sets this IPCClient's {@link IPCListener} to handle received events.<p>
      *
@@ -93,7 +93,7 @@ public final class IPCClient implements Closeable
         if (pipe != null)
             pipe.setListener(listener);
     }
-    
+
     /**
      * Opens the connection between the IPCClient and Discord.<p>
      *
@@ -120,7 +120,7 @@ public final class IPCClient implements Closeable
             listener.onReady(this);
         startReading();
     }
-    
+
     /**
      * Sends a {@link RichPresence} to the Discord client.<p>
      *
@@ -142,7 +142,7 @@ public final class IPCClient implements Closeable
     {
         sendRichPresence(presence, null);
     }
-    
+
     /**
      * Sends a {@link RichPresence} to the Discord client.<p>
      *
@@ -190,7 +190,7 @@ public final class IPCClient implements Closeable
     {
         subscribe(sub, null);
     }
-    
+
     /**
      * Adds an event {@link Event} to this IPCClient.<br>
      * If the provided {@link Event} is added more than once,
@@ -293,19 +293,19 @@ public final class IPCClient implements Closeable
          * type in a JSON payload.
          */
         UNKNOWN(false);
-        
+
         private final boolean subscribable;
-        
+
         Event(boolean subscribable)
         {
             this.subscribable = subscribable;
         }
-        
+
         public boolean isSubscribable()
         {
             return subscribable;
         }
-        
+
         static Event of(String str)
         {
             if(str==null)
@@ -321,7 +321,7 @@ public final class IPCClient implements Closeable
 
 
     // Private methods
-    
+
     /**
      * Makes sure that the client is connected (or not) depending on if it should
      * for the current state.
@@ -336,7 +336,7 @@ public final class IPCClient implements Closeable
         if(!connected && getStatus() == PipeStatus.CONNECTED)
             throw new IllegalStateException(String.format("IPCClient (ID: %d) is already connected!", clientId));
     }
-    
+
     /**
      * Initializes this IPCClient's {@link IPCClient#readThread readThread}
      * and calls the first {@link Pipe#read()}.
@@ -358,24 +358,24 @@ public final class IPCClient implements Closeable
                             if(nonce != null && callbacks.containsKey(nonce))
                                 callbacks.remove(nonce).succeed();
                             break;
-                            
+
                         case ERROR:
                             if(nonce != null && callbacks.containsKey(nonce))
                                 callbacks.remove(nonce).fail(json.getJSONObject("data").optString("message", null));
                             break;
-                            
+
                         case ACTIVITY_JOIN:
                             LOGGER.debug("Reading thread received a 'join' event.");
                             break;
-                            
+
                         case ACTIVITY_SPECTATE:
                             LOGGER.debug("Reading thread received a 'spectate' event.");
                             break;
-                            
+
                         case ACTIVITY_JOIN_REQUEST:
                             LOGGER.debug("Reading thread received a 'join request' event.");
                             break;
-                            
+
                         case UNKNOWN:
                             LOGGER.debug("Reading thread encountered an event with an unknown type: " +
                                          json.getString("evt"));
@@ -391,11 +391,11 @@ public final class IPCClient implements Closeable
                                 case ACTIVITY_JOIN:
                                     listener.onActivityJoin(this, data.getString("secret"));
                                     break;
-                                    
+
                                 case ACTIVITY_SPECTATE:
                                     listener.onActivitySpectate(this, data.getString("secret"));
                                     break;
-                                    
+
                                 case ACTIVITY_JOIN_REQUEST:
                                     JSONObject u = data.getJSONObject("user");
                                     User user = new User(
@@ -431,12 +431,14 @@ public final class IPCClient implements Closeable
             }
         });
 
+        readThread.setDaemon(true);
+
         LOGGER.debug("Starting IPCClient reading thread!");
         readThread.start();
     }
-    
+
     // Private static methods
-    
+
     /**
      * Finds the current process ID.
      *
