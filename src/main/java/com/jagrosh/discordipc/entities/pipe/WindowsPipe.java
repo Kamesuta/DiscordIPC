@@ -64,14 +64,14 @@ public class WindowsPipe extends Pipe
             throw new IOException("Disconnected!");
 
         if(status==PipeStatus.CLOSED)
-            return new Packet(Packet.OpCode.CLOSE, null);
+            return new Packet(Packet.OpCode.CLOSE, null, ipcClient.getEncoding());
 
         Packet.OpCode op = Packet.OpCode.values()[Integer.reverseBytes(file.readInt())];
         int len = Integer.reverseBytes(file.readInt());
         byte[] d = new byte[len];
 
         file.readFully(d);
-        Packet p = new Packet(op, new JSONObject(new String(d)));
+        Packet p = new Packet(op, new JSONObject(new String(d)), ipcClient.getEncoding());
         LOGGER.debug(String.format("Received packet: %s", p.toString()));
         if(listener != null)
             listener.onPacketReceived(ipcClient, p);

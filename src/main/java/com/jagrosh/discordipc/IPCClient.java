@@ -61,6 +61,7 @@ public final class IPCClient implements Closeable
     private volatile Pipe pipe;
     private IPCListener listener = null;
     private Thread readThread = null;
+    private String encoding = "UTF-8";
 
     /**
      * Constructs a new IPCClient using the provided {@code clientId}.<br>
@@ -92,6 +93,33 @@ public final class IPCClient implements Closeable
         this.listener = listener;
         if (pipe != null)
             pipe.setListener(listener);
+    }
+
+    /**
+     * Sets encoding to send .<p>
+     *
+     * This can be set safely before a call to {@link #connect(DiscordBuild...)}
+     * is made.<p>
+     *
+     * default: UTF-8
+     *
+     * @param encoding for this IPCClient.
+     *
+     */
+    public void setEncoding(final String encoding) {
+        this.encoding = encoding;
+    }
+
+    /**
+     * Gets encoding to send .<p>
+     * default: UTF-8
+     *
+     * @param encoding for this IPCClient.
+     *
+     * @return encoding
+     */
+    public String getEncoding() {
+        return this.encoding;
     }
 
     /**

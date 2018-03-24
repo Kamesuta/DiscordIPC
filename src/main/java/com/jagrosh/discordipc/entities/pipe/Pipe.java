@@ -184,7 +184,7 @@ public abstract class Pipe {
         try
         {
             String nonce = generateNonce();
-            Packet p = new Packet(op, data.put("nonce",nonce));
+            Packet p = new Packet(op, data.put("nonce",nonce), ipcClient.getEncoding());
             if(callback!=null && !callback.isEmpty())
                 callbacks.put(nonce, callback);
             write(p.toBytes());

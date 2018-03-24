@@ -69,7 +69,7 @@ public class UnixPipe extends Pipe
             throw new IOException("Disconnected!");
 
         if(status==PipeStatus.CLOSED)
-            return new Packet(Packet.OpCode.CLOSE, null);
+            return new Packet(Packet.OpCode.CLOSE, null, ipcClient.getEncoding());
 
         // Read the op and length. Both are signed ints
         byte[] d = new byte[8];
@@ -80,7 +80,7 @@ public class UnixPipe extends Pipe
         d = new byte[Integer.reverseBytes(bb.getInt())];
 
         is.read(d);
-        Packet p = new Packet(op, new JSONObject(new String(d)));
+        Packet p = new Packet(op, new JSONObject(new String(d)), ipcClient.getEncoding());
         LOGGER.debug(String.format("Received packet: %s", p.toString()));
         if(listener != null)
             listener.onPacketReceived(ipcClient, p);
